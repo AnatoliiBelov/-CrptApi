@@ -8,15 +8,25 @@ import okhttp3.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class CrptApi extends Thread {
+public class CrptApi{
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CrptApi crptApi = (CrptApi) o;
+        return requestLimit == crptApi.requestLimit && timeWindow == crptApi.timeWindow && Objects.equals(httpClient, crptApi.httpClient) && Objects.equals(requestTimestamps, crptApi.requestTimestamps);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(httpClient, requestTimestamps, requestLimit, timeWindow);
+    }
+
     private static final String CREATE_DOCUMENT_URL = "https://ismp.crpt.ru/api/v3/lk/documents/create";
 
     private final OkHttpClient httpClient = new OkHttpClient();
